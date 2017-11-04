@@ -6,6 +6,6 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 ReactDOM.render(
-  <div>Hello Code the Dream Survive JS class!</div>,
+  <div>Hello Code the Dream React class!</div>,
   document.getElementById('app')
 );
