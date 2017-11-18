@@ -1,2 +1,0 @@
-webpackJsonp([0,3],[function(e,t,l){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var a=l(1),u=n(a),d=l(31),c=n(d);c.default.render(u.default.createElement("div",null,u.default.createElement("h1",null,"Hello Code the Dream React class!")),document.getElementById("app"))}]);
-//# sourceMappingURL=app.b2d7f7151969567f7350.js.map
