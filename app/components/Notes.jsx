@@ -1,16 +1,16 @@
 import React from 'react';
 import uuid from 'uuid';
 
-var createNote = (note) => <li key={note.id}>{note.task}</li>;
+import Note from './Note.jsx';
 
-var createNotes = (items) => items.map(createNote);
 
-export default (props) => {
-    let { notes } = props;
-    
-    return (
-        <ul>
-            {createNotes(notes)}
-        </ul>
-    );
-}
+export default ({notes, onDelete=() => {}}) => (
+  <ul>{notes.map(({id, task}) =>
+    <li key={id}>
+      <Note
+        id={id}
+        onDelete={onDelete}
+        task={task} />
+    </li>
+  )}</ul>
+)
