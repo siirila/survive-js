@@ -2,6 +2,7 @@ import React from 'react';
 import uuid from 'uuid';
 
 import Notes from './Notes';
+import connect from '../libs/connect';
 
 
 class App extends React.Component {
@@ -81,6 +82,7 @@ class App extends React.Component {
     let notes = this.state.notes;
     return (
       <div>
+        {this.props.test}
         <button className="add-note" onClick={this.addNote}>+</button>
         <Notes
           notes={notes}
@@ -93,4 +95,7 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(() => ({
+  test: 'test'
+}))(App)
+
