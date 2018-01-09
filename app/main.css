@@ -2,6 +2,22 @@ body {
   background-color: cornsilk;
 
   font-family: sans-serif;
+  margin: 0;
+}
+
+html, body, #app, .app {
+  height: 100%;
+  width: 100%;
+}
+
+.app-light {
+  background-color: white;
+  color: black;
+}
+
+.app-dark {
+  background-color: black;
+  color: green;
 }
 
 .add-note {

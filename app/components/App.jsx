@@ -2,22 +2,13 @@ import React from 'react';
 import uuid from 'uuid';
 
 import Notes from './Notes';
+import ThemeButton from './ThemeButton';
 import connect from '../libs/connect';
 import NoteActions from '../actions/NoteActions';
+import SettingsActions from '../actions/SettingsActions';
 
 class App extends React.Component {
   addNote = () => {
-    // It would be possible to write this in an imperative style.
-    // I.e., through `this.state.notes.push` and then
-    // `this.setState({notes: this.state.notes})` to commit.
-    //
-    // I tend to favor functional style whenever that makes sense.
-    // Even though it might take more code sometimes, I feel
-    // the benefits (easy to reason about, no side effects)
-    // more than make up for it.
-    //
-    // Libraries, such as Immutable.js, go a notch further.
-
     // this.setState({
     //   notes: this.state.notes.concat([{
     //     id: uuid.v4(),
@@ -41,7 +32,6 @@ class App extends React.Component {
     // });
     
     this.props.NoteActions.delete(id);
-
   }
 
   activateNoteEdit = (id) => {
@@ -72,11 +62,23 @@ class App extends React.Component {
     
     this.props.NoteActions.update({id, task, editing: false});
   }
+  
+  decreaseFontSize = () => {
+    this.props.SettingsActions.updateFontSize(--this.props.settings.fontSize);
+  }
+  
+  increaseFontSize = () => {
+    this.props.SettingsActions.updateFontSize(++this.props.settings.fontSize);
+  }
+  
+  changeTheme = (theme) => {
+    this.props.SettingsActions.updateTheme(theme);
+  }
 
   render() {
     let {notes} = this.props;
     return (
-      <div>
+      <div style={{ fontSize: this.props.settings.fontSize }} className={`app app-${this.props.settings.theme}`}>
         {this.props.test}
         <button className="add-note" onClick={this.addNote}>+</button>
         <Notes
@@ -85,12 +87,21 @@ class App extends React.Component {
           onEdit={this.editNote}
           onDelete={this.deleteNote}
         />
+        <div> Font size is: {this.props.settings.fontSize}</div>
+        <div> Change font size:
+          <button onClick={this.decreaseFontSize}>-</button>
+          <button onClick={this.increaseFontSize}>+</button>
+        </div>
+        <ThemeButton theme={this.props.settings.theme} changeTheme={this.changeTheme}/>
       </div>
     );
   }
 }
 
-export default connect(({notes}) => ({
-  notes
-}), { NoteActions })(App)
-
+export default connect(({notes, settings}) => ({
+  notes,
+  settings
+}), { 
+  NoteActions,
+  SettingsActions
+  })(App);
