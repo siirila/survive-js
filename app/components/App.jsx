@@ -1,107 +1,50 @@
 import React from 'react';
 import uuid from 'uuid';
-
-import Notes from './Notes';
-import ThemeButton from './ThemeButton';
 import connect from '../libs/connect';
-import NoteActions from '../actions/NoteActions';
+import Lanes from './Lanes';
+import LaneActions from '../actions/LaneActions';
+import ThemeButton from './ThemeButton';
 import SettingsActions from '../actions/SettingsActions';
 
-class App extends React.Component {
-  addNote = () => {
-    // this.setState({
-    //   notes: this.state.notes.concat([{
-    //     id: uuid.v4(),
-    //     task: 'New task'
-    //   }])
-    // });
-    
-    this.props.NoteActions.create({
+
+const App = ({LaneActions, lanes, settings, SettingsActions}) => {
+  const addLane = () => {
+    LaneActions.create({
       id: uuid.v4(),
-      task: 'New Task'
+      name: 'New lane'
     });
-  }
+  };
   
-  deleteNote = (id, e) => {
-    // Avoid bubbling to edit
-    e.stopPropagation();
-
-    // console.log(`The id being deleted is ${id}`);
-    // this.setState({
-    //   notes: this.state.notes.filter(note => note.id !== id)
-    // });
-    
-    this.props.NoteActions.delete(id);
-  }
-
-  activateNoteEdit = (id) => {
-    // this.setState({
-    //   notes: this.state.notes.map(note => {
-    //     if(note.id === id) {
-    //       note.editing = true;
-    //     }
-
-    //     return note;
-    //   })
-    // });
-    
-    this.props.NoteActions.update({id, editing: true});
-  }
-
-  editNote = (id, task) => {
-    // this.setState({
-    //   notes: this.state.notes.map(note => {
-    //     if(note.id === id) {
-    //       note.editing = false;
-    //       note.task = task;
-    //     }
-
-    //     return note;
-    //   })
-    // });
-    
-    this.props.NoteActions.update({id, task, editing: false});
-  }
+  const decreaseFontSize = () => {
+    SettingsActions.updateFontSize(--settings.fontSize);
+  };
   
-  decreaseFontSize = () => {
-    this.props.SettingsActions.updateFontSize(--this.props.settings.fontSize);
-  }
+  const increaseFontSize = () => {
+    SettingsActions.updateFontSize(++settings.fontSize);
+  };
   
-  increaseFontSize = () => {
-    this.props.SettingsActions.updateFontSize(++this.props.settings.fontSize);
-  }
-  
-  changeTheme = (theme) => {
-    this.props.SettingsActions.updateTheme(theme);
-  }
+  const changeTheme = (theme) => {
+    SettingsActions.updateTheme(theme);
+  };
 
-  render() {
-    let {notes} = this.props;
-    return (
-      <div style={{ fontSize: this.props.settings.fontSize }} className={`app app-${this.props.settings.theme}`}>
-        {this.props.test}
-        <button className="add-note" onClick={this.addNote}>+</button>
-        <Notes
-          notes={notes}
-          onNoteClick={this.activateNoteEdit}
-          onEdit={this.editNote}
-          onDelete={this.deleteNote}
-        />
-        <div> Font size is: {this.props.settings.fontSize}</div>
-        <div> Change font size:
-          <button onClick={this.decreaseFontSize}>-</button>
-          <button onClick={this.increaseFontSize}>+</button>
-        </div>
-        <ThemeButton theme={this.props.settings.theme} changeTheme={this.changeTheme}/>
+  return (
+    <div style={{ fontSize: settings.fontSize }} className={`app app-${settings.theme}`}>
+      <button className="add-lane" onClick={addLane}>Add Lane</button>
+      <Lanes lanes={lanes} />
+      <div> Font size is: {settings.fontSize}</div>
+      <div> Change font size:
+        <button onClick={decreaseFontSize}>-</button>
+        <button onClick={increaseFontSize}>+</button>
       </div>
-    );
-  }
-}
+      <ThemeButton theme={settings.theme} changeTheme={changeTheme}/>
+    </div>
+  );
+};
 
-export default connect(({notes, settings}) => ({
-  notes,
+export default connect(({lanes, settings}) => ({
+  lanes,
   settings
-}), { 
-  NoteActions,
+}), {
+  LaneActions,
   SettingsActions
-  })(App);
+})(App);
